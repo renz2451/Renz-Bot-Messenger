@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "mode": "reply",
+  "personality": "neutral",
+  "cooldownSeconds": 6,
+  "typingDelayMs": 700
+}

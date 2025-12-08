@@ -1,12 +1,12 @@
 module.exports.config = {
-	name: "post",
-	version: "1.0.0",
-	permission: 3,
-	credits: "ryuko",
-	prefix: true,
-	description: "create a new post in acc bot",
-	category: "operator",
-	cooldowns: 5
+  name: "post",
+  version: "1.0.0",
+  permission: 2,
+  credits: "ryuko",
+  prefix: true,
+  description: "create a new post in acc bot",
+  category: "operator",
+  cooldowns: 5
 };
 
 module.exports.run = async ({ event, api, getText, args }) => {
@@ -72,7 +72,7 @@ module.exports.run = async ({ event, api, getText, args }) => {
     "hashtag": null,
     "canUserManageOffers": false
   };
-  
+
   return api.sendMessage(`choose an audience that can see this article of yours\n1. everyone\n2. friend\n3. Only me`, threadID, (e, info) => {
     global.client.handleReply.push({
       name: this.config.name,
@@ -92,20 +92,20 @@ module.exports.handleReply = async ({ event, api, handleReply }) => {
 const fs = require("fs-extra");
 
   const { threadID, messageID, senderID, attachments, body } = event;
-	const botID = api.getCurrentUserID();
-	
+  const botID = api.getCurrentUserID();
+
   async function uploadAttachments(attachments) {
     let uploads = [];
     for (const attachment of attachments) {
-			const form = {
-				file: attachment
-			};
+      const form = {
+        file: attachment
+      };
       uploads.push(api.httpPostFormData(`https://www.facebook.com/profile/picture/upload/?profile_id=${botID}&photo_source=57&av=${botID}`, form));
     }
     uploads = await Promise.all(uploads);
     return uploads;
   }
-  
+
   if (type == "whoSee") {
     if (!["1", "2", "3"].includes(body)) return api.sendMessage('please choose 1 of the 3 items above', threadID, messageID);
     formData.input.audience.privacy.base_state = body == 1 ? "EVERYONE" : body == 2 ? "FRIENDS" : "SELF";
@@ -148,14 +148,14 @@ const fs = require("fs-extra");
       const uploadFiles = await uploadAttachments(allStreamFile);
       for (let result of uploadFiles) {
         if (typeof result == "string") result = JSON.parse(result.replace("for (;;);", ""));
-				
+
         formData.input.attachments.push({
           "photo": {
             "id": result.payload.fbid.toString(),
           }
         });
       }
-			/*
+      /*
       for (const path of paths) {
         try {
           fs.unlinkSync(path);
@@ -164,7 +164,7 @@ const fs = require("fs-extra");
       }
       */
     }
-		/*
+    /*
     api.unsendMessage(handleReply.messageID, () => {
       api.sendMessage(`Bắt đầu tạo bài viết....`, threadID, (e, info) => {
         global.client.handleReply.push({
@@ -178,7 +178,7 @@ const fs = require("fs-extra");
     });
   }
   else if (type == "video") {
-     
+
     if (event.body != "0") {
       if (!handleReply.uploadVideos) handleReply.uploadVideos = [];
       const { uploadVideos } = handleReply;
@@ -187,7 +187,7 @@ const fs = require("fs-extra");
       const pathVideo = __dirname + "/cache/videoPost.mp4";
       fs.writeFileSync(pathVideo, Buffer.from(getFile));
       uploadVideos.push(fs.createReadStream(pathVideo));
-      
+
       return api.unsendMessage(handleReply.messageID, () => {
         api.sendMessage(`Phản hồi tin nhắn này kèm video hoặc reply 0 để kết thúc`, threadID, (e, info) => {
           global.client.handleReply.push({
@@ -201,8 +201,8 @@ const fs = require("fs-extra");
         }, messageID);
       });
     }
-    
-    
+
+
     if (handleReply.uploadVideos) {
       let uploads = [];
       for (const attachment of handleReply.uploadVideos) {
@@ -213,7 +213,7 @@ const fs = require("fs-extra");
         uploads.push(api.httpPostFormData("https://upload.facebook.com/ajax/mercury/upload.php", form));
       }
       uploads = await Promise.all(uploads);
-      
+
       for (let result of uploads) {
         if (typeof result == "string") result = JSON.parse(result.replace("for (;;);", ""));
         formData.input.attachments.push({
@@ -225,7 +225,7 @@ const fs = require("fs-extra");
       }
     }
     */
-    
+
     const form = {
       av: botID,
       fb_api_req_friendly_name: "ComposerStoryCreateMutation",
@@ -233,12 +233,12 @@ const fs = require("fs-extra");
       doc_id: "7711610262190099",
       variables: JSON.stringify(formData)
     };
-		
-		api.httpPost('https://www.facebook.com/api/graphql/', form, (e, info) => {
-		  api.unsendMessage(handleReply.messageID);
-		  try {
-		    if (e) throw e;
-		    if (typeof info == "string") info = JSON.parse(info.replace("for (;;);", ""));
+
+    api.httpPost('https://www.facebook.com/api/graphql/', form, (e, info) => {
+      api.unsendMessage(handleReply.messageID);
+      try {
+        if (e) throw e;
+        if (typeof info == "string") info = JSON.parse(info.replace("for (;;);", ""));
         const postID = info.data.story_create.story.legacy_story_hideable_id;
         const urlPost = info.data.story_create.story.url;
         if (!postID) throw info.errors;
@@ -248,11 +248,11 @@ const fs = require("fs-extra");
         }
         catch(e) {}
         return api.sendMessage(`post created successfully\n\npost id : ${postID}\nlink : ${urlPost}`, threadID, messageID);
-		  }
-		  catch (e) {
-				//console.log(e)
-		    return api.sendMessage(`Post creation failed, please try again later`, threadID, messageID);
-		  }
+      }
+      catch (e) {
+        //console.log(e)
+        return api.sendMessage(`Post creation failed, please try again later`, threadID, messageID);
+      }
     });
 
   }

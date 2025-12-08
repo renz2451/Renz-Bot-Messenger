@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "mode": "react",
+  "personality": "neutral",
+  "persona": "neutral",
+  "cooldownSeconds": 3,
+  "typingDelayMs": 700
+}

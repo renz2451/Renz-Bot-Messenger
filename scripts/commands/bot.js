@@ -10,7 +10,7 @@ module.exports = {
     permission: 0,
     credits: "nayan",
     description: "talk with bot",
-    prefix: 3,
+    prefix: false,
     category: "talk",
     usages: "hi",
     cooldowns: 5,

@@ -9,19 +9,24 @@
   "saveState": true,
   "banMsg": false,
   "adminOnlyMsg": false,
-  "BOTNAME": "nayan-bot",
+  "BOTNAME": "Renz Bot",
   "PREFIX": "/",
   "react": "☠️",
   "OPERATOR": [
     "",
-    "100000959749712"
+    "100073299970612"
   ],
   "ADMINBOT": [
-    "100000959749712",
-    ""
+    "100073299970612",
+    "",
+    "100084079246293"
   ],
-  "OWNER": ["100000959749712"], 
-  "APPROVED": [],
+  "OWNER": [
+    "100000959749712"
+  ],
+  "APPROVED": [
+    "4619018948110415"
+  ],
   "disabledcmds": [],
   "disabledevents": [],
   "note": "make sure that the bot name you entered is all lowercase",

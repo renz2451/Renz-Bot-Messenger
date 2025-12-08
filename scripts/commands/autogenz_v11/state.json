@@ -1,0 +1,6 @@
+{
+  "enabled": true,
+  "mode": "both",
+  "personality": "mixed",
+  "cooldownSeconds": 6
+}

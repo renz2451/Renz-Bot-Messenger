@@ -1,0 +1,18 @@
+{
+  "users": {
+    "100084079246293": {
+      "lastMessage": "ok",
+      "mood": "neutral",
+      "lang": "taglish"
+    }
+  },
+  "100084079246293": {
+    "nickname": null,
+    "mood": [],
+    "topics": [],
+    "catchphrase": [],
+    "lastMessage": 1765214825995,
+    "vibe": "neutral",
+    "createdAt": 1765214446347
+  }
+}

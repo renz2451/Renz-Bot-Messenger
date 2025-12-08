@@ -1,27 +1,27 @@
 {
   "login": {
-    "email": "email",
-    "password": "password"
+    "email": "",
+    "password": ""
   },
   "loginoptions": {
     "selfListen": false,
     "selfListenEvent": false,
     "listenEvents": true,
-    "listenTyping": false,
+    "listenTyping": true,
     "updatePresence": true,
-    "forceLogin": false,
+    "forceLogin": true,
     "autoMarkDelivery": true,
     "autoMarkRead": true,
     "autoReconnect": true,
     "logRecordSize": "defaultLogRecordSize",
-    "online": false,
+    "online": true,
     "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Mobile Safari/537.36"
   },
   "DESCRIPTION": "artificial intelligence is the future, and the future is here.",
-  "allowInbox": false,
+  "allowInbox": true,
   "adminOnly": false,
-  "autoCreateDB": false,
-  "encryptSt": true,
+  "autoCreateDB": true,
+  "encryptSt": false,
   "version": "4.0.0",
   "logs": {
     "enable": true
@@ -30,8 +30,8 @@
     "cooldownTime": 1200000
   },
   "help": {
-    "autoUnsend": true,
-    "delayUnsend": 60
+    "autoUnsend": false,
+    "delayUnsend": 300
   },
   "adminUpdate": {
     "autoUnsend": true,

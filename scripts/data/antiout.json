@@ -1,0 +1,14 @@
+{
+  "1475156826925138": {
+    "enabled": true,
+    "message": "🚫 {name} tried to leave — no escapes allowed!\n\n{type}",
+    "gif": "",
+    "reaction": ""
+  },
+  "9727590390638466": {
+    "enabled": true,
+    "message": "🚫 {name} tried to leave — no escapes allowed!\n\n{type}",
+    "gif": "",
+    "reaction": ""
+  }
+}

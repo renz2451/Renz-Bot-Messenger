@@ -1,0 +1,9 @@
+{
+  "enabled": true,
+  "mode": "both",
+  "reactSelf": false,
+  "replyProbability": 0.8,
+  "delayMode": 3,
+  "personality": "mixed",
+  "cooldownSeconds": 4
+}

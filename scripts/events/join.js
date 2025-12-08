@@ -2,7 +2,7 @@ module.exports.config = {
   name: "join",
   eventType: ['log:subscribe'],
   version: "1.0.0",
-  credits: "Mirai-Team", // FIXED BY YAN Nayan
+  credits: "Mirai-Team", // FIXED BY Nayan
   description: "GROUP UPDATE NOTIFICATION"
 };
 
@@ -28,7 +28,7 @@ module.exports.run = async function({ api, event, Users }) {
   var getHours = await global.client.getTime("hours");
   var session = `${getHours < 3 ? "midnight" : getHours < 8 ? "Early morning" : getHours < 12 ? "noon" : getHours < 17 ? "afternoon" : getHours < 23 ? "evening" : "midnight"}`
   const moment = require("moment-timezone");
-  var thu = moment.tz('Asia/dhaka').format('dddd');
+  var thu = moment.tz('Asia/Manila').format('dddd');
   if (thu == 'Sunday') thu = 'Sunday'
   if (thu == 'Monday') thu = 'Monday'
   if (thu == 'Tuesday') thu = 'Tuesday'
@@ -56,7 +56,7 @@ axios.get(gifUrl, { responseType: 'arraybuffer' })
     fs.writeFileSync(gifPath, response.data);
   if (event.logMessageData.addedParticipants.some(i => i.userFbId == api.getCurrentUserID())) {
     api.changeNickname(`[ ${global.config.PREFIX} ] • ➠${(!global.config.BOTNAME) ? "bot" : global.config.BOTNAME}`, threadID, api.getCurrentUserID());
-    return api.sendMessage("চলে এসেছি আমি পিচ্চি নয়ন তোমাদের মাঝে🤭!", event.threadID, () => api.sendMessage({ body: `${global.config.BOTNAME} CONNECTED«\n\nAssalamualaykum☘️
+    return api.sendMessage("I have come among you, Renz😎!", event.threadID, () => api.sendMessage({ body: `${global.config.BOTNAME} CONNECTED«\n\nEnjoy☘️
 <------------------------------>  
 BOT CONNECTED SUCCESFUL !!! 
 
@@ -66,15 +66,15 @@ APPROVAL ALLOW IN THIS GROUP!!!
 <------------------------------>
 AND FOR ANY COMPLAINTS OR CONTACT BOT OPERATOR 
 
-DEVELOPER :Mohammad Nayan 
+DEVELOPER : Terence Simbre
 
 🟣Facebook Account Link: 
 
-https://www.facebook.com/www.xnxx.com169
+https://www.facebook.com/100073299970612
 
-🔵WHATSAPP NUMBER: wa.me/+8801615298449
+🔵Telegram User Name: r3nz75
 
-🟢SUPPORT EMAIL: www.mdmnnm2004@gmail.com`, attachment: fs.createReadStream(gifPath)}, threadID));
+🟢SUPPORT EMAIL: terencesimbre075@gmail.com`, attachment: fs.createReadStream(gifPath)}, threadID));
   }})
 .catch(error => {
     console.error(error);
@@ -112,7 +112,19 @@ https://www.facebook.com/www.xnxx.com169
           'https://i.imgur.com/V5L9dPi.jpeg',
           'https://i.imgur.com/M7HEAMA.jpeg'
         ]
-        let background = (await axios.get(encodeURI(`${ok[Math.floor(Math.random() * ok.length)]}`), { responseType: "arraybuffer", })).data;
+        let background = await new Promise((resolve, reject) => {
+          request.get(
+            encodeURI(`${ok[Math.floor(Math.random() * ok.length)]}`),
+            { encoding: null },
+            (error, response, body) => {
+              if (error) {
+                reject(error);
+              } else {
+                resolve(body);
+              }
+            }
+          );
+        });
         fs.writeFileSync(pathAva, Buffer.from(avtAnime, "utf-8"));
         fs.writeFileSync(pathImg, Buffer.from(background, "utf-8"));
         var avatar = await this.circle(pathAva);

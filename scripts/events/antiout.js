@@ -1,22 +1,67 @@
+// scripts/events/antiout.js
 module.exports.config = {
- name: "antiout",
- eventType: ["log:unsubscribe"],
- version: "0.0.1",
- credits: "Nayan",
- description: "Listen events"
+  name: "antiout-auto",
+  eventType: ["log:unsubscribe"],
+  version: "1.3.0",
+  credits: "Nayan (upgraded)",
+  description: "Auto re-add members when antiout is ON (per-thread)"
 };
 
-module.exports.run = async({ event, api, Threads, Users }) => {
- let data = (await Threads.getData(event.threadID)).data || {};
- if (data.antiout == false) return;
- if (event.logMessageData.leftParticipantFbId == api.getCurrentUserID()) return;
- const name = global.data.userName.get(event.logMessageData.leftParticipantFbId) || await Users.getNameUser(event.logMessageData.leftParticipantFbId);
- const type = (event.author == event.logMessageData.leftParticipantFbId) ? "self-separation" : "being kicked by the administrator na pasikat";
- if (type == "self-separation") {
-  api.addUserToGroup(event.logMessageData.leftParticipantFbId, event.threadID, (error, info) => {
-   if (error) {
-    api.sendMessage(`Unable to re-add members ${name} to the group\n\n${name} blocked me or There is no Message option in the profile `, event.threadID)
-   } else api.sendMessage(`${name} 𝘀𝘁𝘂𝗽𝗶𝗱 𝘆𝗼𝘂 𝗵𝗮𝘃𝗲 𝗻𝗼 𝗲𝘀𝗰𝗮𝗽𝗲 𝗳𝗿𝗼𝗺 𝗵𝗲𝗿𝗲`, event.threadID);
-  })
- }
+const fs = require("fs-extra");
+const { join } = require("path");
+const dataFile = join(__dirname, "..", "data", "antiout.json");
+
+async function ensureDataFile() {
+  await fs.ensureDir(join(__dirname, "..", "data"));
+  if (!fs.existsSync(dataFile)) await fs.writeJson(dataFile, {});
 }
+
+module.exports.run = async ({ event, api, Users, Threads }) => {
+  try {
+    // ignore bot leaving
+    if (event.logMessageData.leftParticipantFbId == api.getCurrentUserID()) return;
+
+    await ensureDataFile();
+    const all = await fs.readJson(dataFile);
+    const threadID = String(event.threadID);
+    const cfg = all[threadID] || {};
+
+    if (!cfg.enabled) return; // feature off for this thread
+
+    const userID = event.logMessageData.leftParticipantFbId;
+    const name = global.data.userName.get(userID) || await Users.getNameUser(userID).catch(()=> "User");
+
+    // Attempt to add back
+    api.addUserToGroup(userID, event.threadID, async (err, info) => {
+      if (err) {
+        // friendly, stylish error message
+        const errMsg = [
+          "╔═══ ⚠ Antiout Error ═══╗",
+          `║ Failed to restore: ${name}`,
+          "╠═══════════════════════╣",
+          "║ Reason: Could not add user back (blocked or privacy).",
+          "╚══════════════════════╝"
+        ].join("\n");
+        return api.sendMessage(errMsg, event.threadID);
+      }
+
+      // on success, send a cool celebration message (uses cfg.reaction if set)
+      const reaction = cfg.reaction || `🔒 Antiout engaged — ${name} has been returned.\nNo more escape!`;
+      // include mention if possible
+      const mentions = [{
+        tag: "@" + name,
+        id: userID
+      }];
+
+      const final = [
+        "╔═══ ✅ Antiout Active ═══╗",
+        `║ ${reaction}`,
+        "╚════════════════════════╝"
+      ].join("\n");
+
+      return api.sendMessage({ body: final, mentions }, event.threadID);
+    });
+  } catch (err) {
+    console.error("antiout.js error:", err);
+  }
+};

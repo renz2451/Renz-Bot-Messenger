@@ -1,114 +1,94 @@
 module.exports.config = {
     name: "autotime",
-  version: "1.0.0",
-  permission: 0,
-  credits: "Nayan",
-  description: "msg",
-  prefix: true, 
-  category: "user", 
-  usages: "",
-  cooldowns: 5,
-  dependencies: {
-	}
+    version: "3.0.0",
+    permission: 0,
+    credits: "Nayan + ChatGPT",
+    description: "Automatic hourly messages with on/off system",
+    prefix: true,
+    category: "system",
+    usages: "/autotime on | off",
+    cooldowns: 3
 };
-const nam = [{
-    timer: '12:00:00 AM',
-    message: ['~ এখন রাত ১১টা বাজে\nখাউয়া দাউয়া করে নেউ😙']
-},
-             {
-    timer: '1:00:00 AM',
-    message: ['~ এখন রাত ১২টা বেজে গেলো সবাই শুয়ে পড়ো🤟']
-},
-						{
-    timer: '2:00:00 AM',
-    message: ['~এখন রাত ১টা বাজে প্রেম না কইরা যাইয়া ঘুমা বেক্কল😾']
-},
-						 {
-    timer: '3:00:00 AM',
-    message: ['~এখন রাত ২টা বাজে যারা ছ্যাকা খাইছে তারা জেগে আছে🫠🫠।']
-},
-						 {
-    timer: '4:00:00 AM',
-    message: ['~এখন রাত ৩টা বাজে সবাই মনে হয় ঘুম🥹 আমার ভাই ঘুম আসে না  ']
-},
-						 {
-    timer: '5:00:00 AM',
-    message: ['~এখন রাত ৪টা বাজে একটু পর ফজরের আযান দিলে নামাজ পড়ে নিও সবাই ']
-},
-						 {
-    timer: '6:00:00 AM',
-    message: ['~এখন ভোর ৫টা বাজে সবাই নামাজ পড়ছো তো?❤️  ']
-},
-						 {
-    timer: '7:00:00 AM',
-    message: ['~এখন সকাল ৬টা বাজে ঘুম থেকে উঠো সবাই  ']
-},
-						 {
-    timer: '8:00:00 AM',
-    message: ['~এখন সকাল ৭টা বাজে সবাই ব্রেকফাস্ট করে নাও😊 ']
-},
-						 {
-    timer: '9:00:00 AM',
-    message: ['~এখন সকাল ৮ টা বাজে সবাই মনে হয় কাজে ব্যস্ত হয়ে গেছো ']
-},
-             {
-    timer: '10:00:00 AM',
-    message: ['~এখন সকাল ৯ টা বাজে মন দিয়ে কাজ করো সবাই❤️' ]
-},
-						 {
-    timer: '11:00:00 AM',
-    message: ['~এখন সকাল ১০টা বাজে মিস করছি তোমাদের  ']
-},
-						 {
-    timer: '12:00:00 PM',
-    message: ['~এখন সকাল ১১টা বাজে']
-},					
-						 {
-    timer: '1:00:00 PM',
-    message: ['~এখন দুপুর ১২টা বাজে ❤️ ']
-},
-						 {
-    timer: '2:00:00 PM',
-    message: ['~এখন দুপুর ১টা বাজে সবাই কাজ বন্ধ করে জোহরের নামাজ পড়ে নাও😻 ']
-},
-						 {
-    timer: '3:00:00 PM',
-    message: ['~এখন দুপুর ২টা বাজে গোসল করে সবাই দুপুরের খাবার খেয়ে নাও ☺️']
-},
-						 {
-    timer: '4:00:00 PM',
-    message: ['~এখন দুপুর ৩টা বাজে❤️']
-},
-						{
-    timer: '5:00:00 PM',
-    message: ['~ এখন বিকাল ৪টা বাজে আসরের আযান দিলে সবাই নামাজ পড়ে নাও🥀 ']
-},
-						 {
-    timer: '6:00:00 PM',
-    message: ['~এখন বিকাল ৫টা বাজে একটু পর মাগরিবের আযান দিবে সবাই নামাজ পড়ে নিও 😻']
-},
-						 {
-    timer: '7:00:00 PM',
-    message: ['~এখন সন্ধ্যা ৬টা বাজে সবাই হাতমুখ ধুয়ে কিছু খেয়ে নাও এবং পরিবারের সাথে সময় কাটাও😍. ']
-},
-             {
-    timer: '8:00:00 PM',
-    message: ['এখন সন্ধ্যা ৭ টা বাজে কি করছো সবাই এখন এশার আযান দিবে সবাই নামাজ পড়ে নাও❤️']
-},
-             {
-    timer: '9:00:00 PM',
-    message: ['~এখন রাত ৮টা বাজে']
-},
-             {
-    timer: '10:00:00 PM',
-    message: ['এখন রাত ৯টা বাজে সবাই কি শুয়ে পড়লা🙂']
-},
-            {
-    timer: '11:00:00 PM',
-    message: ['~এখন রাত ১০টা বাজে সবাই ঘুমায় পড়ো আমার বউ নাই ভাই ঘুম ও আসে না😭']
-}];
-module.exports.onLoad = o => setInterval(() => {
-    const r = a => a[Math.floor(Math.random()*a.length)];
-    if (á = nam.find(i => i.timer == new Date(Date.now()+25200000).toLocaleString().split(/,/).pop().trim())) global.data.allThreadID.forEach(i => o.api.sendMessage(r(á.message), i));
-}, 1000);
-module.exports.run = o => {};
+
+// Storage inside memory (NO EXTRA FILE)
+global.autoTimeStatus = global.autoTimeStatus || {}; // { threadID: true/false }
+
+const schedule = [
+    { time: "12:00 AM", msg: ["It's 12 AM — midnight vibes 🌙"] },
+    { time: "1:00 AM", msg: ["It's 1 AM — time to sleep 😴"] },
+    { time: "2:00 AM", msg: ["It's 2 AM — don't stay up too late 😪"] },
+    { time: "3:00 AM", msg: ["It's 3 AM — night owls still awake 👀"] },
+    { time: "4:00 AM", msg: ["It's 4 AM — early birds or no sleep? 🤔"] },
+    { time: "5:00 AM", msg: ["It's 5 AM — good morning for some, still night for others 😌"] },
+    { time: "6:00 AM", msg: ["It's 6 AM — a fresh new day ☀️"] },
+    { time: "7:00 AM", msg: ["It's 7 AM — wake up and shine ✨"] },
+    { time: "8:00 AM", msg: ["It's 8 AM — breakfast time 🍳"] },
+    { time: "9:00 AM", msg: ["It's 9 AM — stay productive 💼"] },
+    { time: "10:00 AM", msg: ["It's 10 AM — keep going strong 💪"] },
+    { time: "11:00 AM", msg: ["It's 11 AM — almost noon 🌤️"] },
+    { time: "12:00 PM", msg: ["It's 12 PM — lunch time 🍽️"] },
+    { time: "1:00 PM", msg: ["It's 1 PM — hope you're having a good day 😄"] },
+    { time: "2:00 PM", msg: ["It's 2 PM — take a small break 🌿"] },
+    { time: "3:00 PM", msg: ["It's 3 PM — afternoon vibes 😌"] },
+    { time: "4:00 PM", msg: ["It's 4 PM — stay hydrated 💧"] },
+    { time: "5:00 PM", msg: ["It's 5 PM — almost evening 🌇"] },
+    { time: "6:00 PM", msg: ["It's 6 PM — have a relaxing evening ❤️"] },
+    { time: "7:00 PM", msg: ["It's 7 PM — dinner time 🍜"] },
+    { time: "8:00 PM", msg: ["It's 8 PM — relax and chill 😊"] },
+    { time: "9:00 PM", msg: ["It's 9 PM — getting late 🌙"] },
+    { time: "10:00 PM", msg: ["It's 10 PM — time to rest 😴"] },
+    { time: "11:00 PM", msg: ["It's 11 PM — sleep well 😌"] }
+];
+
+module.exports.onLoad = function({ api }) {
+    setInterval(() => {
+        try {
+            const now = new Date(Date.now() + 25200000); // UTC+7
+            const currentTime = now.toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+
+            const entry = schedule.find(item => item.time === currentTime);
+            if (!entry) return;
+
+            const randomMsg = entry.msg[Math.floor(Math.random() * entry.msg.length)];
+
+            if (global.data && global.data.allThreadID) {
+                global.data.allThreadID.forEach(threadID => {
+                    if (global.autoTimeStatus[threadID] === true) {
+                        api.sendMessage(randomMsg, threadID);
+                    }
+                });
+            }
+
+        } catch (err) {
+            console.log("AutoTime Error:", err);
+        }
+    }, 1000);
+};
+
+module.exports.run = function({ api, event, args }) {
+    const threadID = event.threadID;
+
+    if (!args[0]) {
+        return api.sendMessage(
+            "Use:\n/autotime on  → Enable auto time messages\n/autotime off → Disable auto time messages",
+            threadID
+        );
+    }
+
+    const input = args[0].toLowerCase();
+
+    if (input === "on") {
+        global.autoTimeStatus[threadID] = true;
+        return api.sendMessage("✅ AutoTime enabled for this chat.", threadID);
+    }
+
+    if (input === "off") {
+        global.autoTimeStatus[threadID] = false;
+        return api.sendMessage("❌ AutoTime disabled for this chat.", threadID);
+    }
+
+    return api.sendMessage("Invalid option. Use /autotime on or /autotime off.", threadID);
+};
