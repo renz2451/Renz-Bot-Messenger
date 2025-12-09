@@ -2,15 +2,32 @@
   "100084079246293": {
     "mood": "neutral",
     "nickname": null,
-    "lastMsg": "🤑",
-    "lastEmotion": "neutral",
-    "vibe": "playful"
-  },
-  "61584690392058": {
-    "mood": "neutral",
-    "nickname": null,
-    "lastMsg": "j",
+    "lastMsg": "/changeavatar",
     "lastEmotion": "neutral",
     "vibe": "normal"
+  },
+  "100048817596559": {
+    "mood": "neutral",
+    "nickname": null,
+    "lastMsg": "Mala Spotify ah",
+    "lastEmotion": "neutral",
+    "vibe": "normal",
+    "gender": "unknown"
+  },
+  "100046657223537": {
+    "mood": "neutral",
+    "nickname": null,
+    "lastMsg": "/kickall",
+    "lastEmotion": "neutral",
+    "vibe": "normal",
+    "gender": "unknown"
+  },
+  "100016383969011": {
+    "mood": "neutral",
+    "nickname": null,
+    "lastMsg": "tf",
+    "lastEmotion": "neutral",
+    "vibe": "normal",
+    "gender": "unknown"
   }
 }

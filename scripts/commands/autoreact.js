@@ -25,6 +25,30 @@ function saveMemory(mem) {
 
 
 
+// === GENDER DETECTOR ===
+function detectGender(name) {
+    const n = name.toLowerCase();
+
+    const femaleNames = [
+        "anne","ana","marie","maria","rose","ella","angel","angelyn","samantha",
+        "sara","sarah","joy","jen","jennifer","kath","kathryn","michelle",
+        "ashley","nikki","nicole","bea","mary","princess","queen"
+    ];
+
+    const maleNames = [
+        "john","mark","michael","josh","renz","renjie","james","carl","kyle",
+        "jay","christian","ian","leo","lance","jason","gab","gabriel",
+        "andrew","allan","alden","dominic","romeo"
+    ];
+
+    if (femaleNames.some(v => n.includes(v))) return "female";
+    if (maleNames.some(v => n.includes(v))) return "male";
+
+    return "unknown";
+}
+
+
+
 // === SMART EMOJI REACT ENGINE ===
 async function getAIReact(message) {
     const msg = message.toLowerCase();
@@ -47,7 +71,7 @@ async function getAIReact(message) {
 
 
 
-// === MAIN AI GENZ REPLY WITH MEMORY SYSTEM ===
+// === MAIN AI GENZ WITH MEMORY + GENDER ===
 async function getAIReply(msg, name, userID) {
     try {
         const apiRes = await axios.get(
@@ -55,19 +79,25 @@ async function getAIReply(msg, name, userID) {
         );
         const base = apiRes.data.api;
 
-        // LOAD MEMORY
         const memory = loadMemory();
+
         if (!memory[userID]) memory[userID] = {
             mood: "neutral",
             nickname: null,
             lastMsg: "",
             lastEmotion: "",
-            vibe: "normal"
+            vibe: "normal",
+            gender: "unknown"
         };
 
         const userMem = memory[userID];
 
-        // DETECT SENTIMENT
+        // AUTO DETECT GENDER
+        if (userMem.gender === "unknown") {
+            userMem.gender = detectGender(name);
+        }
+
+        // DETECT EMOTION
         let emotion = "neutral";
         let vibe = userMem.vibe;
 
@@ -90,7 +120,7 @@ async function getAIReply(msg, name, userID) {
             vibe = "playful";
         }
 
-        // SPECIAL EXEMPTION
+        // SPECIAL USER OVERRIDE
         if (name.toLowerCase() === "angelyn dela fuente") {
             vibe = "super-sweet";
         }
@@ -102,11 +132,12 @@ async function getAIReply(msg, name, userID) {
         saveMemory(memory);
 
         const prompt = `
-You are a Gen-Z Taglish AI chatbot with MEMORY.
-You remember the user’s vibe and emotion.
+You are a Gen-Z Taglish AI chatbot with MEMORY & GENDER-AWARE replies.
+You remember the user’s vibe, emotion, and gender.
 
 User name: ${name}
 User ID: ${userID}
+User gender: ${userMem.gender}
 
 PAST MEMORY:
 - Last message: ${userMem.lastMsg}
@@ -116,14 +147,21 @@ PAST MEMORY:
 RULES:
 - Reply in Taglish only.
 - NEVER use Ilokano unless THEY used it.
-- Match memory-based vibe:
+
+- GENDER RULES:
+    * If male → chill, bro-type, playful but not malambing.
+    * If female → softer, sweeter, more lambing.
+    * If unknown → neutral Gen-Z tone.
+
+- VIBE RULES:
     * clingy: sweet, soft, malambing
     * comforting: gentle, emotional support
-    * sarcastic: witty, light clapback
+    * sarcastic: witty, clapback
     * playful: kalog, makulit
     * super-sweet: extra lambing
     * normal: casual Taglish Gen-Z
-- Keep it short, natural, human-like.
+
+- Keep it SHORT, NATURAL, HUMAN-like.
 
 User message: "${msg}"
 Generate your reply:`;
@@ -134,7 +172,6 @@ Generate your reply:`;
 
         let reply = ai.data.response || "Wait, ano ulit sinabi mo?";
 
-        // HUMAN spice
         if (Math.random() < 0.2) {
             reply += " " + random(["HAHA", "lol", "char", "tbh"]);
         }
@@ -143,20 +180,19 @@ Generate your reply:`;
 
     } catch (err) {
         console.log("Reply Error:", err);
-        return "Naghang utak ko teh wait 😭";
+        return "Naglag ako beh wait 😭";
     }
 }
-
 
 
 
 // === MODULE CONFIG ===
 module.exports.config = {
     name: "autogenz",
-    version: "15.0.0",
+    version: "15.1.0",
     permission: 0,
     credits: "ChatGPT + Nayan + Jantzy Upgrade",
-    description: "Gen-Z Taglish AI with memory, typing simulation & accurate reacts",
+    description: "Gen-Z Taglish AI with memory, gender, vibes & accurate reacts",
     prefix: true,
     category: "ai",
     usages: "[on/off]",
@@ -165,7 +201,7 @@ module.exports.config = {
 
 module.exports.languages = {
     en: {
-        on: "🔥 AutoGenZ with MEMORY is now ACTIVE!",
+        on: "🔥 AutoGenZ with MEMORY + GENDER is now ACTIVE!",
         off: "💤 AutoGenZ is OFF.",
         error: "Use: /autogenz on or /autogenz off"
     }
@@ -173,8 +209,7 @@ module.exports.languages = {
 
 
 
-
-// === EVENT HANDLER (typing + memory) ===
+// === EVENT HANDLER ===
 module.exports.handleEvent = async function ({ api, event, Users }) {
 
     if (!fs.existsSync(stateFile)) fs.writeFileSync(stateFile, "false");
@@ -185,27 +220,22 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
 
     const name = await Users.getNameUser(event.senderID);
 
-    // EMOJI
     const emoji = await getAIReact(event.body);
     api.setMessageReaction(emoji, event.messageID, () => {}, true);
 
-    // REPLY (with memory)
     const reply = await getAIReply(event.body, name, event.senderID);
 
-    // TYPING SIMULATION
     const delay = Math.min(2500, reply.length * 18);
 
     api.sendTypingIndicator(event.threadID);
     setTimeout(() => {
         api.sendMessage(reply, event.threadID, event.messageID);
     }, delay);
-
 };
 
 
 
-
-// === ON/OFF ===
+// === ON/OFF COMMAND ===
 module.exports.start = async function ({ nayan, events, args, lang }) {
 
     if (args[0] === "on") {

@@ -1,8 +1,0 @@
-{
-  "enabled": true,
-  "mode": "react",
-  "personality": "neutral",
-  "cooldownSeconds": 6,
-  "moodWindowMinutes": 60,
-  "safetyMode": true
-}
